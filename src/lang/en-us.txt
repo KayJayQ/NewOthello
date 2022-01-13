@@ -1,0 +1,11 @@
+1:Othello
+2:Config
+3:View
+4:About
+5:Lang/语言
+6:PvE
+7:Multiplayer
+8:Exit
+9:Close
+10:Still multiplayer Othello, but in Java implementation (and PLAYABLE). Time to re-study java again :(
+11:Enable AI
