@@ -10,10 +10,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import src.Personality.PersonalityClass;
+
 import java.awt.*;
 import java.awt.event.*;
-
-import src.Text;
 
 public class Menu {
 
@@ -21,6 +21,7 @@ public class Menu {
     private JFrame frame;
     private JPanel panel;
     private JMenuBar bar;
+    private Menu THIS;
     // Title icon resource
     static ImageIcon titleIMG = new ImageIcon("src/image/title.png");
     // Game launch configs
@@ -28,6 +29,7 @@ public class Menu {
 
     public Menu(JFrame frame) {
         this.frame = frame;
+        this.THIS = this;
         this.createUI();
         this.refresh();
     }
@@ -108,6 +110,17 @@ public class Menu {
         singlePlayer.setBounds(350, 350, 100, 50);
         this.panel.add(singlePlayer);
 
+        singlePlayer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.validate();
+                if(AI)
+                    new Game(frame, THIS, PersonalityClass.Self, PersonalityClass.AI);
+                else
+                    new Game(frame, THIS, PersonalityClass.Self, PersonalityClass.Self);
+            }
+        });
+
         JButton multiplayer = new JButton(Text.textLib.get(7));
         multiplayer.setBounds(350, 410, 100, 50);
         this.panel.add(multiplayer);
@@ -124,7 +137,7 @@ public class Menu {
         });
     }
 
-    private void refresh() {
+    public void refresh() {
         if(this.panel != null){
             this.frame.remove(this.panel);
             this.createUI();

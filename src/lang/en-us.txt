@@ -9,3 +9,12 @@
 9:Close
 10:Still multiplayer Othello, but in Java implementation (and PLAYABLE). Time to re-study java again :(
 11:Enable AI
+12:Black
+13:White
+14:Game Over
+15:White won
+16:Black won
+17:On Black
+18:On White
+19:Player's turn
+20:Competitor's turn
