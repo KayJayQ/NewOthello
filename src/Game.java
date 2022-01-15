@@ -29,11 +29,11 @@ public class Game {
     private JPanel panel;
     Menu menu;
     // Image resources
-    ImageIcon chartIMG = new ImageIcon("src/image/chart.png");
-    ImageIcon blankIMG = new ImageIcon("src/image/blank.png");
-    ImageIcon whiteIMG = new ImageIcon("src/image/white.png");
-    ImageIcon blackIMG = new ImageIcon("src/image/black.png");
-    ImageIcon availIMG = new ImageIcon("src/image/available.png");
+    ImageIcon chartIMG = new ImageIcon("image/chart.png");
+    ImageIcon blankIMG = new ImageIcon("image/blank.png");
+    ImageIcon whiteIMG = new ImageIcon("image/white.png");
+    ImageIcon blackIMG = new ImageIcon("image/black.png");
+    ImageIcon availIMG = new ImageIcon("image/available.png");
     // Logic Related
     GameLogic logic;
     boolean repaint = false;

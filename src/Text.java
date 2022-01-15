@@ -16,8 +16,8 @@ public class Text {
     public static HashMap<Integer, String> textLib;
 
     //text lib
-    String zh_cn = "src/lang/zh-cn.txt";
-    String en_us = "src/lang/en-us.txt";
+    String zh_cn = "lang/zh-cn.txt";
+    String en_us = "lang/en-us.txt";
     
     public Text(){
         // NOOP

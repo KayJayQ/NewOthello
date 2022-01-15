@@ -24,7 +24,7 @@ public class Menu {
     private JMenuBar bar;
     private Menu THIS;
     // Title icon resource
-    static ImageIcon titleIMG = new ImageIcon("src/image/title.png");
+    static ImageIcon titleIMG = new ImageIcon("image/title.png");
     // Game launch configs
     private boolean AI = false;
     public Level level = Level.Hard;
@@ -39,7 +39,6 @@ public class Menu {
     private void createUI() {
         new Text();
         this.panel = new JPanel(null);
-
         this.bar = new JMenuBar();
         JMenu config = new JMenu(Text.textLib.get(2));
         JMenu view = new JMenu(Text.textLib.get(3));
