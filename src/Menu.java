@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import src.Personality.PersonalityClass;
+import src.personalities.AI.Level;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -26,6 +27,7 @@ public class Menu {
     static ImageIcon titleIMG = new ImageIcon("src/image/title.png");
     // Game launch configs
     private boolean AI = false;
+    public Level level = Level.Hard;
 
     public Menu(JFrame frame) {
         this.frame = frame;
@@ -95,6 +97,34 @@ public class Menu {
             @Override
             public void stateChanged(ChangeEvent e) {
                 AI = enableAI.isSelected();
+            }
+        });
+
+        JMenuItem AIEasy = new JMenuItem(Text.textLib.get(21));
+        JMenuItem AIMedian = new JMenuItem(Text.textLib.get(22));
+        JMenuItem AIHard = new JMenuItem(Text.textLib.get(23));
+        config.add(AIEasy);
+        config.add(AIMedian);
+        config.add(AIHard);
+
+        AIEasy.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                level = Level.Easy;
+            }
+        });
+
+        AIMedian.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                level = Level.Median;
+            }
+        });
+
+        AIHard.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                level = Level.Hard;
             }
         });
         

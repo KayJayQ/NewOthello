@@ -20,6 +20,7 @@ import javax.swing.*;
 import src.GameLogic.Color;
 import src.GameLogic.Turn;
 import src.Personality.PersonalityClass;
+import src.personalities.AI;
 import src.personalities.Self;
 
 public class Game {
@@ -36,6 +37,8 @@ public class Game {
     // Logic Related
     GameLogic logic;
     boolean repaint = false;
+    // Mutex for rendering
+    protected int mutex = 0;
 
     public Game(JFrame frame, Menu menu, PersonalityClass player, PersonalityClass match) {
         this.frame = frame;
@@ -45,10 +48,13 @@ public class Game {
         switch(match){
             case Self:
             this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new Self(PersonalityClass.Self));
+            break;
             case AI:
-            this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new Self(PersonalityClass.AI));
+            this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new AI(PersonalityClass.AI, menu.level));
+            break;
             case Internet:
             this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new Self(PersonalityClass.Internet));
+            break;
         }
 
         this.createUI();
@@ -97,7 +103,7 @@ public class Game {
     }
 
     private void drawChart() {
-        GameLogic.Status[][] chart = logic.getChart();
+        GameLogic.Status[][] chart = logic.getChart().clone();
         for(int y = 0; y < 8; y++) {
             for(int x = 0; x < 8; x++) {
                 final int cood_x = x;
@@ -131,6 +137,10 @@ public class Game {
                     case Blank:
                         // NOOP
                         break;
+                    case Invalid:
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -155,12 +165,14 @@ public class Game {
     }
 
     public void refresh(){
+        this.mutex++;
         if(this.panel != null) {
             this.frame.remove(this.panel);
             this.createUI();
         }
         this.frame.setContentPane(this.panel);
         this.frame.validate();
+        this.mutex--;
     }
 
     private void backToMenu(){

@@ -9,6 +9,8 @@
  */
 package src;
 
+import java.util.ArrayList;
+
 import src.GameLogic.Status;
 
 public abstract class Personality {

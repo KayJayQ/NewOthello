@@ -6,6 +6,9 @@
  */
 package src.personalities;
 
+import java.util.ArrayList;
+
+import src.GameLogic.Pair;
 import src.GameLogic.Status;
 import src.Personality;
 

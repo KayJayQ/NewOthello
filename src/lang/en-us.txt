@@ -1,5 +1,5 @@
 1:Othello
-2:Config
+2:AI Config
 3:View
 4:About
 5:Lang/语言
@@ -18,3 +18,6 @@
 18:On White
 19:Player's turn
 20:Competitor's turn
+21:Easy
+22:Median
+23:Hard

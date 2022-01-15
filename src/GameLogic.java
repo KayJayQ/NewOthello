@@ -7,11 +7,32 @@
 package src;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.SwingWorker;
 
 import src.Personality.Operation;
 import src.Personality.PersonalityClass;
 
 public class GameLogic {
+
+    public static class Pair<K, V> {
+        private K k;
+        private V v;
+    
+        public Pair(K k, V v) {
+            this.k = k;
+            this.v = v;
+        }
+    
+        public K key() {
+            return k;
+        }
+    
+        public V value() {
+            return v;
+        }
+    }
 
     public static enum Status{
         Blank,
@@ -69,12 +90,13 @@ public class GameLogic {
     }
 
     public Status[][] getChart() {
+        this.clearAvailable();
         if(this.turn == Turn.Player) {
             playerRole.handleTurn(this.chart);
             if(this.markAvailable() == 0) {
                 this.canPlayerPlace = false;
                 this.skipTurn();
-                this.game.repaint = true;
+                this.game.repaint = true; 
             } else {
                 this.canPlayerPlace = true;
             }
@@ -89,7 +111,31 @@ public class GameLogic {
                     this.canMatchPlace = true;
                 }
             } else {
-                int[] cood = matchRole.OperationCood();
+                ArrayList<Pair<Integer, Integer>> avail = this.getAvailable();
+                if(avail.size() == 0) {
+                    this.canMatchPlace = false;
+                    this.skipTurn();
+                    this.game.repaint = true;
+                } else {
+                    this.canMatchPlace = true;
+                    SwingWorker<Void, Void> matchTurn = 
+                    new SwingWorker<Void, Void>() {
+                        @Override
+                        public Void doInBackground() {
+                            int[] res = matchRole.OperationCood();
+                            while(game.mutex != 0) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            clickHandler(res[0], res[1]);
+                            return null;
+                        }
+                    };
+                    matchTurn.execute();
+                }
             }
         }
 
@@ -137,7 +183,6 @@ public class GameLogic {
     }
 
     public void clickHandler(int x, int y) {
-        this.clearAvailable();
         this.setPiece(x, y);
         this.skipTurn();
         game.refresh();
@@ -162,6 +207,18 @@ public class GameLogic {
             }
         }
         return count;
+    }
+
+    private ArrayList<Pair<Integer, Integer>> getAvailable() {
+        ArrayList<Pair<Integer, Integer>> res = new ArrayList<Pair<Integer, Integer>>();
+        for(int x = 0; x < 8; x++) {
+            for(int y = 0; y < 8; y++) {
+                if(this.isAvailable(x, y)) {
+                    res.add(new Pair<Integer, Integer>(x, y));
+                }
+            }
+        }
+        return res;
     }
 
     public void clearAvailable() {
