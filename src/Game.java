@@ -21,6 +21,7 @@ import src.GameLogic.Color;
 import src.GameLogic.Turn;
 import src.Personality.PersonalityClass;
 import src.personalities.AI;
+import src.personalities.Internet;
 import src.personalities.Self;
 
 public class Game {
@@ -47,13 +48,13 @@ public class Game {
 
         switch(match){
             case Self:
-            this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new Self(PersonalityClass.Self));
+            this.logic = new GameLogic(this, new Self(PersonalityClass.Self), new Self(PersonalityClass.Self));
             break;
             case AI:
-            this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new AI(PersonalityClass.AI, menu.level));
+            this.logic = new GameLogic(this, new Self(PersonalityClass.Self), new AI(PersonalityClass.AI, menu.level));
             break;
             case Internet:
-            this.logic = new GameLogic(this, Color.Black, new Self(PersonalityClass.Self), new Self(PersonalityClass.Internet));
+            this.logic = new GameLogic(this, new Internet(PersonalityClass.Internet), new Internet(PersonalityClass.Internet));
             break;
         }
 

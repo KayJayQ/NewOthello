@@ -12,7 +12,7 @@ import src.Menu;
 
 public class Othello{
     // version
-    public static final String version = "v0.1";
+    public static final String version = "v0.2";
 
     public static JFrame frame; // Public window frame
     // fixed window size
@@ -42,6 +42,7 @@ public class Othello{
                 new Text().loadText(0);
                 Othello game = new Othello();
                 game.createMenu();
+                new Connection();
             }
         });
     }

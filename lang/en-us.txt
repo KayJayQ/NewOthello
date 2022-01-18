@@ -21,3 +21,7 @@
 21:Easy
 22:Median
 23:Hard
+24:Match players
+25:Select one player to start
+26:Refresh list
+27:71.199.122.129

@@ -7,7 +7,6 @@
 package src;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -64,8 +63,8 @@ public class GameLogic {
     boolean canPlayerPlace = true;
     boolean canMatchPlace = true;
 
-    public GameLogic(Game game, Color color, Personality playerRole, Personality matchRole){
-        this.color = color;
+    public GameLogic(Game game, Personality playerRole, Personality matchRole){
+        this.color = Color.Black;
         this.game = game;
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++){
@@ -79,7 +78,14 @@ public class GameLogic {
 
         this.playerRole = playerRole;
         this.matchRole = matchRole;
-        assert this.playerRole.personality == PersonalityClass.Self;
+        
+        if(this.playerRole.personality == PersonalityClass.Internet) {
+            Connection.setGame(this);
+            if(!Connection.host) {
+                this.color = Color.White;
+                this.turn = Turn.Match;
+            }
+        }
     }
 
     private Status getPiece(int x, int y) {
@@ -102,6 +108,9 @@ public class GameLogic {
             }
         } else {
             Operation result = matchRole.handleTurn(this.chart);
+            if(matchRole.personality == PersonalityClass.Internet) {
+                result = Operation.COOD;
+            }
             if(result == Operation.USER){
                 if(this.markAvailable() == 0) {
                     this.canMatchPlace = false;
@@ -146,6 +155,8 @@ public class GameLogic {
     }
 
     public void gameEnd() {
+        this.canMatchPlace = false;
+        this.canPlayerPlace = false;
         this.game.repaint = false;
         this.game.gameEndPage();
     }
@@ -183,6 +194,9 @@ public class GameLogic {
     }
 
     public void clickHandler(int x, int y) {
+        if(this.turn == Turn.Player && this.playerRole.personality == PersonalityClass.Internet) {
+            Connection.putMessage("3 " + String.valueOf(x) + " " + String.valueOf(y) + "\r\n");
+        }
         this.setPiece(x, y);
         this.skipTurn();
         game.refresh();

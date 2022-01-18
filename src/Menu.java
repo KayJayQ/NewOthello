@@ -15,6 +15,12 @@ import src.personalities.AI.Level;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class Menu {
 
@@ -28,6 +34,9 @@ public class Menu {
     // Game launch configs
     private boolean AI = false;
     public Level level = Level.Hard;
+    // Multiplayer
+    Socket socket;
+    String playerName;
 
     public Menu(JFrame frame) {
         this.frame = frame;
@@ -154,6 +163,41 @@ public class Menu {
         multiplayer.setBounds(350, 410, 100, 50);
         this.panel.add(multiplayer);
 
+        multiplayer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String refresh = Text.textLib.get(26);
+                ArrayList<String> list;
+                if(socket == null)
+                    createConnection();
+                if(socket == null)
+                    return;
+                list = getPlayerList();
+
+                String[] selections = new String[list.size() + 1];
+                selections[0] = refresh;
+                for(int i = 1; i < selections.length; i++) {
+                    selections[i] = list.get(i - 1);
+                }
+
+                Object window = JOptionPane.showInputDialog(
+                    frame,
+                    Text.textLib.get(24),
+                    Text.textLib.get(25),
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    selections,
+                    selections[0]
+                );
+
+                if(window != null && window.equals(refresh)) {
+                    return;
+                }
+                Connection.putMessage("2 " + (String)window + "\r\n");
+                Connection.host = true;
+            }
+        });
+
         JButton exit = new JButton(Text.textLib.get(8));
         exit.setBounds(350, 470, 100, 50);
         this.panel.add(exit);
@@ -164,6 +208,52 @@ public class Menu {
                 System.exit(0);
             }
         });
+    }
+
+    public ArrayList<String> getPlayerList() {
+        ArrayList<String> res = new ArrayList<String>();
+        String[] buffer;
+
+        Connection.putMessage("4 get\r\n");
+        buffer = Connection.getMessage(4).split(" ");
+
+        // buffer[0] is server cmd index
+        for(int i = 1; i < buffer.length; i++) {
+            if(buffer[i].equals(this.playerName)) continue;
+            res.add(buffer[i]);
+        }
+        return res;
+    }
+
+    public void createConnection() {
+        try {
+            this.socket = new Socket(Text.textLib.get(27), 8080);
+            Connection.setSocket(this.socket);
+            Connection.setMenu(this);
+            
+            Connection.recvThread.start();
+
+            Connection.putMessage("1 " + System.getProperty("user.name") + "\r\n");
+            String line = Connection.getMessage(0);
+            line = Connection.getMessage(1);
+            this.playerName = line.split(":")[1];
+            System.out.println("Connection established");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                        frame,
+                        "Connection to server failed",
+                        "Error",
+                        JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+    }
+
+    public void startMultiplay() {
+        String msg = Connection.getMessage(2);
+        System.out.println("Start game with " + msg);
+        Connection.heartbeatThread.start();
+        new Game(frame, this, PersonalityClass.Internet, PersonalityClass.Internet);
     }
 
     public void refresh() {
