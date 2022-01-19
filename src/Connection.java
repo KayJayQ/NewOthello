@@ -141,7 +141,7 @@ public class Connection {
             if(stopThread)
                 break;
             try{
-                Thread.sleep(1000);
+                Thread.sleep(2000);
                 putMessage("0 OK \r\n");
             } catch (InterruptedException e) {
                 continue;

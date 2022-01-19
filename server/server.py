@@ -8,7 +8,7 @@ import time
 server_addr = ['0.0.0.0', 8080]
 g_server = None
 
-timeout = 50.0
+timeout = 10.0
 
 class Status(Enum):
     Free = 1
@@ -62,7 +62,7 @@ class Connection:
                     remove.append(conn)
             for conn in remove:
                 conn.remove_connection()
-            time.sleep(1)
+            time.sleep(2)
 
     def handle_message(self):
         while True:
