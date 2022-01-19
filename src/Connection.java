@@ -30,6 +30,8 @@ public class Connection {
 
     public static boolean host = false;
 
+    public static boolean mutex = true;
+
     public Connection(){
         // NOOP because this is static class
     }
@@ -43,13 +45,17 @@ public class Connection {
     }
 
     public static void putMessage(String msg) {
-        Thread thread = new Thread() {
-            public void run() {
-                pw.println(msg);
-                pw.flush();
+        while(!mutex) {
+            try{
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                continue;
             }
-        };
-        thread.start();
+        }
+        mutex = false;
+        pw.println(msg);
+        pw.flush();
+        mutex =  true;
     }
 
     public static String getMessage(int item) {
